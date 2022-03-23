@@ -3,11 +3,15 @@ import "./todo.css"
 
 const Todo = () => {
     const [todoInput, setTodoInput] = useState("")
+    const [checked,setChecked]=useState(false)
     const [todoList, setTodoList] = useState([
         {   count:null,
-            text: "",
-            date: "",
-            time: ""
+            text: "Neha",
+            date: "2022-01-01",
+            time: "00:00",
+            del:"X",
+            checked:false
+
         }
     ])
     const [date, setDate] = useState("")
@@ -15,35 +19,72 @@ const Todo = () => {
     const [count,setCount]=useState(1)
 
     const handleClick = () => {
-        setCount(count+1)
+        
      if(!date || !time){
          alert("Enter date and time")
          return
      }
         if (!todoInput ) {
-            alert("Enter something")
+            alert("Enter something/Item already Exist")
             return
         } else {
-
+           
             setTodoList([...todoList, {
                 text: todoInput,
                 date,
                 time,
-                count
+                count,
+                del:"X",
+                checked
+                
+
+
+
 
             }])
+           
+            setCount(count+1)
             setTodoInput("")
         }
     }
+
+    const handleDelete=(id)=>{
+        const filtered=todoList.filter(item=>item.count!=id)
+       setTodoList(filtered)
+       
+
+    }
+    const handleClear=()=>{
+        setTodoList([ {
+            text: "",
+            date:"",
+            time:"",
+            count:"",
+            del:""
+
+        }])
+    }
+  
+    const handleCheck=(e,id)=>{
+
+        const filteredCheck=todoList.find(item=>item.count!=id)
+        setChecked(!filteredCheck.checked)
+        console.log(checked);
+
+       
+  
+        
+    }
+
     return (
         <>
-            <div>
+            <div className="upper">
                 <h1>TODO LIST</h1>
                 <h3>Add Todo Here</h3>
                 <input autoFocus placeholder="Enter Todo..." onChange={e => setTodoInput(e.target.value)} />
                 <input type="date" onChange={e => setDate(e.target.value)} />
-                <input type="time" onChange={e => setTime(e.target.value)} />
-                <button onClick={handleClick}>Add </button>
+                <input type="time" onChange={e => setTime(e.target.value)} /><br/>
+                <button onClick={handleClick} className="btn btn-success">Add Todo</button>
             </div>
 
             <div>
@@ -54,6 +95,9 @@ const Todo = () => {
                             <th scope="col">Name</th>
                             <th scope="col">Date</th>
                             <th scope="col">Time</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Delete</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -62,10 +106,13 @@ const Todo = () => {
                             todoList.map((item) => (
 
                                 <tr key={item.count}>
-                                    <td >{item.count}</td>
+                                    <td className="bullet">•</td>
                                     <td >{item.text}</td>
                                     <td>{item.date}</td>
                                     <td>{item.time}</td>
+                                    <td><input type="checkbox" className="check" value={checked} onChange={e=>handleCheck(e,item.count)}/>{checked?"Completed":"Incomplete"}</td>
+
+                                    <td style={{cursor:"pointer"}} onClick={()=>handleDelete(item.count)} className="del">{item.del}</td>
                                 </tr>
 
                             ))
@@ -78,6 +125,7 @@ const Todo = () => {
 
 
             </div>
+            <button onClick={handleClear} className="btn btn-primary">Clear All</button>
         </>
     )
 }
