@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./todo.css"
 
 const Todo = () => {
     const [todoInput, setTodoInput] = useState("")
-    const [checked,setChecked]=useState(false)
+  useEffect(()=>{
+  
+  },[])
+
     const [todoList, setTodoList] = useState([
         {   count:null,
             text: "Neha",
@@ -35,12 +38,7 @@ const Todo = () => {
                 time,
                 count,
                 del:"X",
-                checked
-                
-
-
-
-
+                checked:false
             }])
            
             setCount(count+1)
@@ -65,16 +63,16 @@ const Todo = () => {
         }])
     }
   
-    const handleCheck=(e,id)=>{
-
-        const filteredCheck=todoList.find(item=>item.count!=id)
-        setChecked(!filteredCheck.checked)
-        console.log(checked);
-
-       
-  
+    const handleCheck=(id)=>{
         
+        const filtered=[...todoList];
+        const targetInd = filtered.findIndex(el=>el.count===id)
+        filtered[targetInd].checked=!filtered[targetInd].checked
+        setTodoList(filtered)
+  
     }
+   
+
 
     return (
         <>
@@ -110,8 +108,9 @@ const Todo = () => {
                                     <td >{item.text}</td>
                                     <td>{item.date}</td>
                                     <td>{item.time}</td>
-                                    <td><input type="checkbox" className="check" value={checked} onChange={e=>handleCheck(e,item.count)}/>{checked?"Completed":"Incomplete"}</td>
-
+                                    {/* <td><input type="checkbox" className="check" checked={checked} onChange={()=>toggleChecked(item.count)}/>{checked?"Completed":"Incomplete"}</td> */}
+                                    <td><input type="checkbox" className="check" onChange={()=>handleCheck(item.count)}/>{item.checked?"Completed":"Incomplete"}</td>
+         
                                     <td style={{cursor:"pointer"}} onClick={()=>handleDelete(item.count)} className="del">{item.del}</td>
                                 </tr>
 
