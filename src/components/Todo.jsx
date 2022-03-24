@@ -47,7 +47,7 @@ const Todo = () => {
     }
 
     const handleDelete=(id)=>{
-        const filtered=todoList.filter(item=>item.count!=id)
+        const filtered=todoList.filter(item=>item.count!==id)
        setTodoList(filtered)
        
 
